@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flyer/screens/select_machine.dart';
 import 'package:flyer/screens/splash.dart';
 import 'package:flyer/services/Flyer/provider_service.dart';
 import 'package:flyer/services/Carding/provider_service.dart';
@@ -23,6 +24,9 @@ void main() async {
 
   status = await Permission.bluetoothScan.status;
   if (status.isDenied) {
+
+
+
 
     await Permission.bluetoothScan.request();
   }

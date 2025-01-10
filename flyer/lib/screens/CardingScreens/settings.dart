@@ -9,6 +9,7 @@ import 'package:flyer/message/Carding/machineEnums.dart';
 import 'package:flyer/message/acknowledgement.dart';
 import 'package:flyer/message/Carding/settings_request.dart';
 import 'package:flyer/message/Carding/settingsMessage.dart';
+import 'package:flyer/screens/CardingScreens/pid_settings.dart';
 import 'package:flyer/screens/CardingScreens/settingsPopUpPage.dart';
 import 'package:flyer/services/Carding/provider_service.dart';
 import 'package:provider/provider.dart';
@@ -31,14 +32,13 @@ class CardingSettingsPage extends StatefulWidget {
 class _CardingSettingsPageState extends State<CardingSettingsPage> {
 
   final TextEditingController _deliverySpeed = TextEditingController();
-  final TextEditingController _draft = TextEditingController();
-  final TextEditingController _cylinderSpeed = TextEditingController();
-  final TextEditingController _beaterSpeed = TextEditingController();
-  final TextEditingController _cylFeedSpeed = TextEditingController();
-  final TextEditingController _btrFeedSpeed = TextEditingController();
-  final TextEditingController _trunkSensorDelay = TextEditingController();
+  final TextEditingController _cardFeedRatio = TextEditingController();
   final TextEditingController _lengthLimit = TextEditingController();
-  final TextEditingController _rampTimes = TextEditingController();
+  final TextEditingController _cylSpeed = TextEditingController();
+  final TextEditingController _btrSpeed = TextEditingController();
+  final TextEditingController _pickerCylSpeed = TextEditingController();
+  final TextEditingController _btrFeed = TextEditingController();
+  final TextEditingController _afFeed = TextEditingController();
 
   List<String> _data = List<String>.empty(growable: true);
   bool newDataReceived = false;
@@ -65,16 +65,15 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
       if(!Provider.of<CardingConnectionProvider>(context,listen: false).isSettingsEmpty){
 
         Map<String,String> _s = Provider.of<CardingConnectionProvider>(context,listen: false).settings;
-
+        print(_s);
         _deliverySpeed.text = _s["deliverySpeed"].toString();
-        _draft.text =  _s["draft"].toString();
-        _cylinderSpeed.text = _s["cylSpeed"].toString();
-        _beaterSpeed.text = _s["btrSpeed"].toString();
-        _cylFeedSpeed.text = _s["cylFeedSpeed"].toString();
-        _btrFeedSpeed.text = _s["btrFeedSpeed"].toString();
-        _trunkSensorDelay.text=_s["trunkDelay"].toString();
+        _cardFeedRatio.text =  _s["cardFeedRatio"].toString();
         _lengthLimit.text = _s["lengthLimit"].toString();
-        _rampTimes.text = _s["rampTimes"].toString();
+        _cylSpeed.text = _s["cylSpeed"].toString();
+        _btrSpeed.text = _s["btrSpeed"].toString();
+        _pickerCylSpeed.text=_s["pickerCylSpeed"].toString();
+        _btrFeed.text = _s["btrFeed"].toString();
+        _afFeed.text = _s["afFeed"].toString();
       }
     }
     catch(e){
@@ -140,22 +139,63 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
 
             Table(
               columnWidths: const <int, TableColumnWidth>{
-                0: FractionColumnWidth(0.55),
-                1: FractionColumnWidth(0.35),
+                0: FractionColumnWidth(0.75),
+                1: FractionColumnWidth(0.22),
               },
               defaultVerticalAlignment: TableCellVerticalAlignment.middle,
               children: <TableRow>[
-                _customRow("DeliverySpeed (mtr/min)", _deliverySpeed,defaultValue: "",enabled: _enabled),
-                _customRow("Draft", _draft,defaultValue: "",enabled: _enabled),
-                _customRow("Card Cylinder RPM", _cylinderSpeed, isFloat: false,defaultValue: "",enabled: _disable),
-                _customRow("Beater Cylinder RPM", _beaterSpeed, isFloat: false,defaultValue: "",enabled: _disable),
-                _customRow("Card Feed RPM", _cylFeedSpeed,defaultValue: "",enabled: _enabled),
-                _customRow("Beater Feed RPM", _btrFeedSpeed,defaultValue: "",enabled: _enabled),
-                _customRow("Duct Sensor Delay(s)", _trunkSensorDelay,isFloat: false,defaultValue: "",enabled: _enabled),
-                _customRow("Length Limit (mtrs)", _lengthLimit,isFloat: false,defaultValue: "",enabled: _enabled),
-                _customRow("Ramp Times (sec)", _rampTimes,isFloat: false,defaultValue: "",enabled: _disable),
+                _customRow("Delivery Speed (m/min)", _deliverySpeed, defaultValue: "", enabled: _enabled),
+                TableRow(
+                  children: [
+                    TableCell(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 8.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Expanded(
+                              flex: 8,
+                              child: Divider(
+                                color: Colors.grey,
+                                thickness: 1.0,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 2.0),
+                              child: Text(
+                                "Advanced Settings",
+                                style: TextStyle(
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                            flex: 8,
+                              child: Divider(
+                                color: Colors.grey,
+                                thickness: 1.0,
+
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const TableCell(child: SizedBox()), // Empty cell for alignment
+                  ],
+                ),
+                _customRow("CardFeed Ratio", _cardFeedRatio, defaultValue: "", enabled: _enabled),
+                _customRow("Length Limit (mtrs)", _lengthLimit, isFloat: false, defaultValue: "", enabled: _enabled),
+                _customRow("Cylinder Speed (RPM)", _cylSpeed, isFloat: false, defaultValue: "", enabled: _disable),
+                _customRow("Beater Speed (RPM)", _btrSpeed, isFloat: false, defaultValue: "", enabled: _disable),
+                _customRow("Picker Cylinder Speed (RPM)", _pickerCylSpeed, isFloat: false, defaultValue: "", enabled: _disable),
+                _customRow("Beater Feed (RPM)", _btrFeed, defaultValue: "", enabled: _enabled),
+                _customRow("AF_Feed(RPM)", _afFeed, defaultValue: "", enabled: _enabled),
               ],
             ),
+
 
             Container(
               width: MediaQuery.of(context).size.width,
@@ -216,16 +256,15 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
             onPressed: (){
               //hard coded change
               _deliverySpeed.text =  "8";
-              _draft.text =  "1";
-              _cylinderSpeed.text = "750";
-              _beaterSpeed.text = "600";
-              _cylFeedSpeed.text = "1.2";
-              _btrFeedSpeed.text = "1.2";
-              _trunkSensorDelay.text= "3";
-              _lengthLimit.text = "100";
-              _rampTimes.text = "5";
+              _cardFeedRatio.text =  "5";
+              _lengthLimit.text = "1000";
+              _cylSpeed.text = "750";
+              _btrSpeed.text = "600";
+              _pickerCylSpeed.text= "600";
+              _btrFeed.text = "10";
+              _afFeed.text = "7";
 
-              SettingsMessage _sm = SettingsMessage(deliverySpeed: _deliverySpeed.text, draft: _draft.text, cylSpeed:_cylinderSpeed.text,beaterSpeed:_beaterSpeed.text,cylFeedSpeed:_cylFeedSpeed.text,btrFeedSpeed:_btrFeedSpeed.text,trunkDelay:_trunkSensorDelay.text,lengthLimit: _lengthLimit.text, rampTimes: _rampTimes.text);
+              SettingsMessage _sm = SettingsMessage(deliverySpeed: _deliverySpeed.text, cardFeedRatio: _cardFeedRatio.text, lengthLimit:_lengthLimit.text,cylSpeed:_cylSpeed.text,btrSpeed:_btrSpeed.text,pickerCylSpeed:_pickerCylSpeed.text,btrFeed:_btrFeed.text,afFeed: _afFeed.text);
 
               CardingConnectionProvider().setSettings(_sm.toMap());
               Provider.of<CardingConnectionProvider>(context,listen: false).setSettings(_sm.toMap());
@@ -244,68 +283,7 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
       ),
 
 
-      //update
-      Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          IconButton(
-            onPressed: () async {
-              String _valid = isValidForm();
-              //if settings are valid, try to see if the motor RPMs are correct
-              if(_valid == "valid"){
-                _valid = calculate();
-              }
-              if(_valid == "valid"){
 
-                SettingsMessage _sm = SettingsMessage(deliverySpeed: _deliverySpeed.text, draft: _draft.text, cylSpeed:_cylinderSpeed.text,beaterSpeed:_beaterSpeed.text,cylFeedSpeed:_cylFeedSpeed.text,btrFeedSpeed:_btrFeedSpeed.text,trunkDelay:_trunkSensorDelay.text,lengthLimit: _lengthLimit.text, rampTimes: _rampTimes.text);
-                String _msg = _sm.createPacket(SettingsUpdate.update);
-
-
-                CardingConnectionProvider().setSettings(_sm.toMap());
-                Provider.of<CardingConnectionProvider>(context,listen: false).setSettings(_sm.toMap());
-
-                connection!.output.add(Uint8List.fromList(utf8.encode(_msg)));
-                await connection!.output!.allSent.then((v) {});
-                await Future.delayed(Duration(milliseconds: 500)); //wait for acknowledgement
-
-                if(newDataReceived){
-                  String _d = _data.last;
-
-                  if(_d == Acknowledgement().createErrorPacket()){
-                    //no eeprom error , acknowledge
-                    SnackBar _sb = SnackBarService(message: "Settings Updated", color: Colors.green).snackBar();
-                    ScaffoldMessenger.of(context).showSnackBar(_sb);
-
-                  }
-                  else{
-                    //failed acknowledgement
-                    SnackBar _sb = SnackBarService(message: "Settings Not Updated", color: Colors.red).snackBar();
-                    ScaffoldMessenger.of(context).showSnackBar(_sb);
-                  }
-
-                  newDataReceived = false;
-                  setState(() {
-                  });
-                }
-
-              }
-              else{
-                SnackBar _sb = SnackBarService(message: _valid, color: Colors.red).snackBar();
-                ScaffoldMessenger.of(context).showSnackBar(_sb);
-              }
-            },
-            icon: Icon(Icons.system_update_alt,color: Theme.of(context).primaryColor,),
-          ),
-          Text(
-            "Update",
-            style: TextStyle(
-              fontSize: 10,
-              color: Theme.of(context).primaryColor,
-            ),
-          ),
-        ],
-      ),
 
       //save button
       Column(
@@ -316,12 +294,12 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
             onPressed: () async {
               String _valid = isValidForm();
               //if settings are valid, try to see if the motor RPMs are correct
-              if(_valid == "valid"){
-                _valid = calculate();
-              }
+              // if(_valid == "valid"){
+              //   _valid = calculate();
+              // }
               if(_valid == "valid"){
 
-                SettingsMessage _sm = SettingsMessage(deliverySpeed: _deliverySpeed.text, draft: _draft.text, cylSpeed:_cylinderSpeed.text,beaterSpeed:_beaterSpeed.text,cylFeedSpeed:_cylFeedSpeed.text,btrFeedSpeed:_btrFeedSpeed.text,trunkDelay:_trunkSensorDelay.text,lengthLimit: _lengthLimit.text, rampTimes: _rampTimes.text);
+                SettingsMessage _sm = SettingsMessage(deliverySpeed: _deliverySpeed.text, cardFeedRatio: _cardFeedRatio.text, lengthLimit:_lengthLimit.text,cylSpeed:_cylSpeed.text,btrSpeed:_btrSpeed.text,pickerCylSpeed:_pickerCylSpeed.text,btrFeed:_btrFeed.text,afFeed: _afFeed.text);
                 String _msg = _sm.createPacket(SettingsUpdate.save);
 
                 CardingConnectionProvider().setSettings(_sm.toMap());
@@ -334,7 +312,7 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
                 if(newDataReceived){
                   String _d = _data.last;
 
-                  if(_d == Acknowledgement().createErrorPacket()){
+                  if(_d == Acknowledgement().createPacket()){
                     //no eeprom error , acknowledge
 
                     SnackBar _sb = SnackBarService(message: "Settings Saved", color: Colors.green).snackBar();
@@ -370,6 +348,27 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
         ],
       ),
 
+      //PID Setting
+      Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          IconButton(
+            onPressed: () async {
+              _showPinDialog();
+            },
+            icon: Icon(Icons.system_update_alt,color: Theme.of(context).primaryColor,),
+          ),
+          Text(
+            "PID",
+            style: TextStyle(
+              fontSize: 10,
+              color: Theme.of(context).primaryColor,
+            ),
+          ),
+        ],
+      ),
+
       //parameters button
       Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -389,7 +388,7 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
                   throw FormatException(_err);
                 }
 
-                SettingsMessage _sm = SettingsMessage(deliverySpeed: _deliverySpeed.text, draft: _draft.text, cylSpeed:_cylinderSpeed.text,beaterSpeed:_beaterSpeed.text,cylFeedSpeed:_cylFeedSpeed.text,btrFeedSpeed:_btrFeedSpeed.text,trunkDelay:_trunkSensorDelay.text,lengthLimit: _lengthLimit.text, rampTimes: _rampTimes.text);
+                SettingsMessage _sm = SettingsMessage(deliverySpeed: _deliverySpeed.text, cardFeedRatio: _cardFeedRatio.text, lengthLimit:_lengthLimit.text,cylSpeed:_cylSpeed.text,btrSpeed:_btrSpeed.text,pickerCylSpeed:_pickerCylSpeed.text,btrFeed:_btrFeed.text,afFeed: _afFeed.text);
 
                 CardingConnectionProvider().setSettings(_sm.toMap());
                 Provider.of<CardingConnectionProvider>(context,listen: false).setSettings(_sm.toMap());
@@ -446,7 +445,7 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
         throw FormatException('Invalid Packet');
       }
 
-      if(_d.substring(4,6)=="02" || _d == Acknowledgement().createErrorPacket() || _d == Acknowledgement().createErrorPacket(error: true)){
+      if(_d.substring(4,6)=="02" || _d == Acknowledgement().createPacket() || _d == Acknowledgement().createPacket(error: true)){
 
         //Allow if:
         //request settins data
@@ -537,90 +536,19 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
       }
     }
 
-    if(_draft.text.trim() == "" ){
-      errorMessage = "Draft is Empty!";
+    if(_cardFeedRatio.text.trim() == "" ){
+      errorMessage = "cardFeedRatio is Empty!";
       return errorMessage;
     }
     else{
-      List range = settingsLimits["draft"]!;
-      double val = double.parse(_draft.text.trim());
+      List range = settingsLimits["cardFeedRatio"]!;
+      double val = double.parse(_cardFeedRatio.text.trim());
 
       if(val < range[0] || val > range[1]){
-        errorMessage = "Draft values should be within $range";
+        errorMessage = "cardFeed Ratio values should be within $range";
         return errorMessage;
       }
     }
-
-    if(_cylinderSpeed.text.trim() == "" ){
-      errorMessage = "Cylinder RPM is Empty!";
-      return errorMessage;
-    }
-    else{
-      List range = settingsLimits["cylSpeed"]!;
-      double val = double.parse(_cylinderSpeed.text.trim());
-
-      if(val < range[0] || val > range[1]){
-        errorMessage = "Cylinder RPM values should be within $range";
-        return errorMessage;
-      }
-    }
-
-    if(_cylFeedSpeed.text.trim() == "" ){
-      errorMessage = "Card Feed RPM is Empty!";
-      return errorMessage;
-    }
-    else{
-      List range = settingsLimits["cylFeedSpeed"]!;
-      double val = double.parse(_cylFeedSpeed.text.trim());
-      print(val);
-      if(val < range[0] || val > range[1]){
-        errorMessage = "Card Feed RPM values should be within $range";
-        return errorMessage;
-      }
-    }
-
-    if(_beaterSpeed.text.trim() == "" ){
-      errorMessage = "Beater RPM is Empty!";
-      return errorMessage;
-    }
-    else{
-      List range = settingsLimits["btrSpeed"]!;
-      double val = double.parse(_beaterSpeed.text.trim());
-
-      if(val < range[0] || val > range[1]){
-      errorMessage = "Beater RPM values should be within $range";
-      return errorMessage;
-      }
-    }
-
-    if(_btrFeedSpeed.text.trim() == "" ){
-      errorMessage = "Beater Feed RPM is Empty!";
-      return errorMessage;
-    }
-    else{
-      List range = settingsLimits["btrFeedSpeed"]!;
-      double val = double.parse(_btrFeedSpeed.text.trim());
-
-      if(val < range[0] || val > range[1]){
-      errorMessage = "Beater Feed RPM values should be within $range";
-      return errorMessage;
-      }
-    }
-
-    if(_trunkSensorDelay.text.trim() == "" ){
-      errorMessage = "Trunk Sensor Delay is Empty!";
-      return errorMessage;
-      }
-    else{
-    List range = settingsLimits["trunkDelay"]!;
-    double val = double.parse(_trunkSensorDelay.text.trim());
-
-    if(val < range[0] || val > range[1]){
-      errorMessage = "Trunk Sensor Delay values should be within $range";
-      return errorMessage;
-      }
-    }
-
 
     if(_lengthLimit.text.trim() == "" ){
       errorMessage = "Length Limit is Empty!";
@@ -631,22 +559,78 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
       double val = double.parse(_lengthLimit.text.trim());
 
       if(val < range[0] || val > range[1]){
-        errorMessage = "Length Limit values should be within $range";
+        errorMessage = "length limit values should be within $range";
         return errorMessage;
       }
     }
 
-    if(_rampTimes.text.trim() == "" ){
-      errorMessage = "Ramp Times is Empty!";
+    if(_cylSpeed.text.trim() == "" ){
+      errorMessage = "Cylinder Speed is Empty!";
+      return errorMessage;
+    }
+    else{
+      List range = settingsLimits["cylSpeed"]!;
+      double val = double.parse(_cylSpeed.text.trim());
+      print(val);
+      if(val < range[0] || val > range[1]){
+        errorMessage = "Cylinder speed values should be within $range";
+        return errorMessage;
+      }
+    }
+
+    if(_btrSpeed.text.trim() == "" ){
+      errorMessage = "Beater RPM is Empty!";
+      return errorMessage;
+    }
+    else{
+      List range = settingsLimits["btrSpeed"]!;
+      double val = double.parse(_btrSpeed.text.trim());
+
+      if(val < range[0] || val > range[1]){
+      errorMessage = "Beater RPM values should be within $range";
+      return errorMessage;
+      }
+    }
+
+    if(_btrFeed.text.trim() == "" ){
+      errorMessage = "Beater Feed RPM is Empty!";
+      return errorMessage;
+    }
+    else{
+      List range = settingsLimits["btrFeed"]!;
+      double val = double.parse(_btrFeed.text.trim());
+
+      if(val < range[0] || val > range[1]){
+      errorMessage = "Beater Feed RPM values should be within $range";
+      return errorMessage;
+      }
+    }
+
+    if(_pickerCylSpeed.text.trim() == "" ){
+      errorMessage = "picker Cylinder  is Empty!";
+      return errorMessage;
+    }
+    else{
+      List range = settingsLimits["pickerCylSpeed"]!;
+      double val = double.parse(_pickerCylSpeed.text.trim());
+
+      if(val < range[0] || val > range[1]){
+        errorMessage = "Picker Cylinder values should be within $range";
+        return errorMessage;
+      }
+    }
+
+    if(_afFeed.text.trim() == "" ){
+      errorMessage = "Af_Feed is Empty!";
       return errorMessage;
     }
     else{
 
-      List range = settingsLimits["rampTimes"]!;
-      double val = double.parse(_rampTimes.text.trim());
+      List range = settingsLimits["afFeed"]!;
+      double val = double.parse(_afFeed.text.trim());
 
       if(val < range[0] || val > range[1]){
-        errorMessage = "Ramp Times values should be within $range";
+        errorMessage = "Af Feed values should be within $range";
         return errorMessage;
       }
     }
@@ -679,19 +663,18 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
         }
 
         _deliverySpeed.text = settings["deliverySpeed"].toString();
-        _draft.text = settings["draft"].toString();
-        _cylinderSpeed.text = settings["cylSpeed"]!.toInt().toString();
-        _beaterSpeed.text = settings["btrSpeed"]!.toInt().toString();
-        _cylFeedSpeed.text = settings["cylFeedSpeed"].toString();
-        _btrFeedSpeed.text = settings["btrFeedSpeed"].toString();
-        _trunkSensorDelay.text = settings["trunkDelay"]!.toInt().toString();
+        _cardFeedRatio.text = settings["cardFeedRatio"].toString();
         _lengthLimit.text = settings["lengthLimit"]!.toInt().toString();
-        _rampTimes.text = settings["rampTimes"]!.toInt().toString();
+        _cylSpeed.text = settings["cylSpeed"]!.toInt().toString();
+        _btrSpeed.text = settings["btrSpeed"]!.toInt().toString();
+        _pickerCylSpeed.text = settings["pickerCylSpeed"]!.toInt().toString();
+        _btrFeed.text = settings["btrFeed"]!.toInt().toString();
+        _afFeed.text = settings["afFeed"]!.toInt().toString();
 
         newDataReceived = false;
 
 
-        SettingsMessage _sm = SettingsMessage(deliverySpeed: _deliverySpeed.text, draft: _draft.text, cylSpeed:_cylinderSpeed.text,beaterSpeed:_beaterSpeed.text,cylFeedSpeed:_cylFeedSpeed.text,btrFeedSpeed:_btrFeedSpeed.text,trunkDelay:_trunkSensorDelay.text,lengthLimit: _lengthLimit.text, rampTimes: _rampTimes.text);
+        SettingsMessage _sm = SettingsMessage(deliverySpeed: _deliverySpeed.text, cardFeedRatio: _cardFeedRatio.text, lengthLimit:_lengthLimit.text,cylSpeed:_cylSpeed.text,btrSpeed:_btrSpeed.text,pickerCylSpeed:_pickerCylSpeed.text,btrFeed:_btrFeed.text,afFeed: _afFeed.text);
 
         CardingConnectionProvider().setSettings(_sm.toMap());
         Provider.of<CardingConnectionProvider>(context,listen: false).setSettings(_sm.toMap());
@@ -740,28 +723,27 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
     String errorMessage = "valid";
 
     int maxRPM = 1450;
-    int cylMaxRpm = 3500;
     double deliverySpeed = double.parse(_deliverySpeed.text);
-    double draft = double.parse(_draft.text);
-    double cylSpeed = double.parse(_cylinderSpeed.text);
-    double btrSpeed = double.parse(_beaterSpeed.text);
-    double cylFeedSpeed = double.parse(_cylFeedSpeed.text);
-    double btrFeedSpeed = double.parse(_btrFeedSpeed.text);
+    double draft = double.parse(_cardFeedRatio.text);
+    double cylSpeed = double.parse(_cylSpeed.text);
+    double btrSpeed = double.parse(_btrSpeed.text);
+    // double cylFeedSpeed = double.parse(_cylFeedSpeed.text);
+    // double btrFeedSpeed = double.parse(_btrFeedSpeed.text);
 
-    double cylinderGearRatio = 4;
-    double beaterGearRatio = 4;
-    double cylinderFeedGb = 120;
-    double beaterFeedGb = 120;
+    double cylinderGearRatio = 1.2;
+    double beaterGearRatio = 1.2;
+    double cylinderFeedGb = 180;
+    double beaterFeedGb = 180;
     double tongueGrooveCircumferenceMm = 213.63;
-    double cageGb = 5;
+    double cageGb = 6.91;
     double coilerGrooveCircumferenceMm = 194.779;
     double coilerGrooveToGbRatio = 1.656;
     double coilerGb = 6.91;
 
-    double cylinderMotorRPM = cylSpeed*cylinderGearRatio;
-    double beaterMotorRPM = btrSpeed*beaterGearRatio;
-    double cylinderFeedMotorRPM = cylFeedSpeed * cylinderFeedGb;
-    double beaterFeedMotorRPM = btrFeedSpeed * beaterFeedGb;
+    double cylinderMotorRPM = cylSpeed/cylinderGearRatio;
+    double beaterMotorRPM = btrSpeed/beaterGearRatio;
+    // double cylinderFeedMotorRPM = cylFeedSpeed * cylinderFeedGb;
+    // double beaterFeedMotorRPM = btrFeedSpeed * beaterFeedGb;
     double cageGbRpm = (deliverySpeed*1000)/tongueGrooveCircumferenceMm;
     double cageMotorRPM = cageGbRpm * cageGb;
     double reqCoilerTongueSurfaceSpeedMm = (deliverySpeed*1000) * draft;
@@ -770,22 +752,22 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
     double coilerMotorRPM = coilerGbRpm * coilerGb;
 
 
-    if(cylinderMotorRPM > cylMaxRpm){
-      errorMessage = "Cylinder Motor RPM (${cylinderMotorRPM.toInt()}) exceeds  motor Max RPM ($cylMaxRpm). Check 'Parameters' page for more details.";
+    if(cylinderMotorRPM > maxRPM){
+      errorMessage = "Cylinder Motor RPM (${cylinderMotorRPM.toInt()}) exceeds  motor Max RPM ($maxRPM). Check 'Parameters' page for more details.";
       return errorMessage;
      }
-    if(beaterMotorRPM > cylMaxRpm){
-      errorMessage = "Beater Motor RPM (${beaterMotorRPM.toInt()}) exceeds motor Max RPM ($cylMaxRpm). Check 'Parameters' page for more details";
+    if(beaterMotorRPM > maxRPM){
+      errorMessage = "Beater Motor RPM (${beaterMotorRPM.toInt()}) exceeds motor Max RPM ($maxRPM). Check 'Parameters' page for more details";
       return errorMessage;
      }
-    if(cylinderFeedMotorRPM > maxRPM){
-      errorMessage = "Cylinder Feed Motor RPM (${cylinderFeedMotorRPM.toInt()}) exceeds motor Max RPM ($maxRPM). Check 'Parameters' page for more details";
-      return errorMessage;
-    }
-    if(beaterFeedMotorRPM > maxRPM){
-      errorMessage = "Beater Feed Motor RPM (${beaterFeedMotorRPM.toInt()}) exceeds motor Max RPM ($maxRPM). Check 'Parameters' page for more details";
-      return errorMessage;
-    }
+    // if(cylinderFeedMotorRPM > maxRPM){
+    //   errorMessage = "Cylinder Feed Motor RPM (${cylinderFeedMotorRPM.toInt()}) exceeds motor Max RPM ($maxRPM). Check 'Parameters' page for more details";
+    //   return errorMessage;
+    // }
+    // if(beaterFeedMotorRPM > maxRPM){
+    //   errorMessage = "Beater Feed Motor RPM (${beaterFeedMotorRPM.toInt()}) exceeds motor Max RPM ($maxRPM). Check 'Parameters' page for more details";
+    //   return errorMessage;
+    // }
     if(cageMotorRPM > maxRPM){
       errorMessage = "Cage Motor RPM (${cageMotorRPM.toInt()}) exceeds motor Max RPM ($maxRPM). Check 'Parameters' page for more details";
       return errorMessage;
@@ -823,6 +805,138 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
           ],
         ),
       ),
+    );
+  }
+
+  // Show Pin Dialog
+
+  void _showPinDialog() {
+    final TextEditingController _pinController = TextEditingController();
+    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+    bool _isObscure = true;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Enter PIN',
+            style: TextStyle(
+              color: Theme.of(context).primaryColor,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Form(
+                key: _formKey,
+                child: TextFormField(
+                  controller: _pinController,
+                  keyboardType: TextInputType.number,
+                  obscureText: _isObscure,
+                  maxLength: 6,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Enter 6-digit PIN',
+                    hintStyle: TextStyle(
+                      color: Colors.grey[600],
+                    ),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _isObscure ? Icons.visibility : Icons.visibility_off,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _isObscure = !_isObscure;
+                        });
+                      },
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter PIN';
+                    }
+                    if (value.length != 6) {
+                      return 'PIN must be 6 digits';
+                    }
+                    if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                      return 'PIN must contain only numbers';
+                    }
+                    return null;
+                  },
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(6),
+                  ],
+                ),
+              );
+            },
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'Cancel',
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 16,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text(
+                'Verify',
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  // Replace '123456' with your actual PIN
+                  if (_pinController.text == '123456') {
+                    Navigator.of(context).pop();
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const PIDSettingsCarding(
+                          connection: null,
+                          settingsStream: null,
+                        ),
+                      ),
+                    );
+
+                    // Show success message
+                    // ScaffoldMessenger.of(context).showSnackBar(
+                    //   SnackBarService(
+                    //     message: "PIN Verified Successfully",
+                    //     color: Colors.green,
+                    //   ).snackBar(),
+                    // );
+                    // Add your PID settings logic here
+                    // You can navigate to PID settings page or show another dialog
+                  } else {
+                    // Show error message
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBarService(
+                        message: "Invalid PIN",
+                        color: Colors.red,
+                      ).snackBar(),
+                    );
+                  }
+                }
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

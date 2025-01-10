@@ -53,15 +53,14 @@ extension runningExtension on Running{
 }
 
 enum SettingsAttribute{
-  deliverySpeed,
-  draft,
-  cylSpeed,
-  btrSpeed,
-  cylFeedSpeed,
-  btrFeedSpeed,
-  trunkDelay,
-  lengthLimit,
-  rampTimes,
+   deliverySpeed,
+   cardFeedRatio,
+   lengthLimit,
+   cylSpeed,
+   btrSpeed,
+   pickerCylSpeed,
+   btrFeed,
+   afFeed
 }
 
 extension SettingsAttributeTypeExtension on SettingsAttribute{
@@ -70,22 +69,20 @@ extension SettingsAttributeTypeExtension on SettingsAttribute{
     switch (this){
       case SettingsAttribute.deliverySpeed:
         return "80";
-      case SettingsAttribute.draft:
+      case SettingsAttribute.cardFeedRatio:
         return "81";
-      case SettingsAttribute.cylSpeed:
+      case SettingsAttribute.lengthLimit:
         return "82";
-      case SettingsAttribute.cylFeedSpeed:
+      case SettingsAttribute.cylSpeed:
         return "83";
       case SettingsAttribute.btrSpeed:
         return "84";
-      case SettingsAttribute.btrFeedSpeed:
+      case SettingsAttribute.pickerCylSpeed:
         return "85";
-      case SettingsAttribute.trunkDelay:
+      case SettingsAttribute.btrFeed:
         return "86";
-      case SettingsAttribute.lengthLimit:
+      case SettingsAttribute.afFeed:
         return "87";
-      case SettingsAttribute.rampTimes:
-        return "88";
     }
   }
 }
@@ -98,6 +95,8 @@ enum MotorId{
   cylinderFeed,
   beaterFeed,
   coiler,
+  picker_cylinder,
+  af_feed
 }
 
 extension MotorIdExtension on MotorId{
@@ -117,6 +116,10 @@ extension MotorIdExtension on MotorId{
         return "05";
       case MotorId.coiler:
         return "06";
+      case MotorId.picker_cylinder:
+        return "07";
+      case MotorId.af_feed:
+        return "08";
     }
   }
 }

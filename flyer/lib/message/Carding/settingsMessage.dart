@@ -6,38 +6,35 @@ import 'machineEnums.dart';
 
 Map<String,List> settingsLimits = {
   "deliverySpeed":[2.5,50],
-  "draft":[0.5,4],
+  "cardFeedRatio":[3,10],
   "cylSpeed":[300,750],
   "btrSpeed":[300,650],
-  "cylFeedSpeed":[0.1,11],
-  "btrFeedSpeed":[0.1,11],
-  "trunkDelay":[1,10],
-  "lengthLimit":[30,300],
-  "rampTimes":[3,10],
+  "pickerCylSpeed":[300,650],
+  "btrFeed":[1,11],
+  "lengthLimit":[100,1000],
+  "afFeed":[1,8],
 };
 
 class SettingsMessage{
   
   String deliverySpeed;
-  String draft;
-  String cylSpeed;
-  String beaterSpeed;
-  String cylFeedSpeed;
-  String btrFeedSpeed;
-  String trunkDelay;
+  String cardFeedRatio;
   String lengthLimit;
-  String rampTimes;
+  String cylSpeed;
+  String btrSpeed;
+  String pickerCylSpeed;
+  String btrFeed;
+  String afFeed;
 
   SettingsMessage({
   required this.deliverySpeed,
-  required this.draft,
-  required this.cylSpeed,
-  required this.beaterSpeed,
-  required this.cylFeedSpeed,
-  required this.btrFeedSpeed,
-  required this.trunkDelay,
+  required this.cardFeedRatio,
   required this.lengthLimit,
-  required this.rampTimes,
+  required this.cylSpeed,
+  required this.btrSpeed,
+  required this.pickerCylSpeed,
+  required this.btrFeed,
+  required this.afFeed,
   });
 
   String createPacket(SettingsUpdate substate){
@@ -63,21 +60,20 @@ class SettingsMessage{
     packet += padding(attributeCount,bit2);
 
     packet += attribute(SettingsAttribute.deliverySpeed.hexVal,bit8s,padding(deliverySpeed, bit8));
-    packet += attribute(SettingsAttribute.draft.hexVal, bit8s, padding(draft, bit8));
-    packet += attribute(SettingsAttribute.cylSpeed.hexVal, bit4s, padding(cylSpeed, bit4));
-    packet += attribute(SettingsAttribute.btrSpeed.hexVal, bit4s, padding(beaterSpeed, bit4));
-    packet += attribute(SettingsAttribute.cylFeedSpeed.hexVal, bit8s, padding(cylFeedSpeed, bit8));
-    packet += attribute(SettingsAttribute.btrFeedSpeed.hexVal, bit8s, padding(btrFeedSpeed, bit8));
-    packet += attribute(SettingsAttribute.trunkDelay.hexVal, bit4s, padding(trunkDelay, bit4));
+    packet += attribute(SettingsAttribute.cardFeedRatio.hexVal, bit8s, padding(cardFeedRatio, bit8));
     packet += attribute(SettingsAttribute.lengthLimit.hexVal, bit4s, padding(lengthLimit, bit4));
-    packet += attribute(SettingsAttribute.rampTimes.hexVal, bit4s, padding(rampTimes, bit4));
+    packet += attribute(SettingsAttribute.cylSpeed.hexVal, bit4s, padding(cylSpeed, bit4));
+    packet += attribute(SettingsAttribute.btrSpeed.hexVal, bit4s, padding(btrSpeed, bit4));
+    packet += attribute(SettingsAttribute.pickerCylSpeed.hexVal, bit4s, padding(pickerCylSpeed, bit4));
+    packet += attribute(SettingsAttribute.btrFeed.hexVal, bit4s, padding(btrFeed, bit4));
+    packet += attribute(SettingsAttribute.afFeed.hexVal, bit4s, padding(afFeed, bit4));
 
     packet += Separator.eof.hexVal;
 
     packetLength = padding(packet.length.toString(),2);
 
     packet = Separator.sof.hexVal + packetLength + packet;
-    //print(packet);
+    print(packet);
     return packet.toUpperCase();
   }
 
@@ -115,14 +111,13 @@ class SettingsMessage{
   Map<String,String> toMap(){
     Map<String,String> _settings = {
       "deliverySpeed": deliverySpeed,
-      "draft": draft,
+      "cardFeedRatio": cardFeedRatio,
       "cylSpeed": cylSpeed,
-      "btrSpeed": beaterSpeed,
-      "cylFeedSpeed": cylFeedSpeed,
-      "btrFeedSpeed": btrFeedSpeed,
-      "trunkDelay": trunkDelay,
+      "btrSpeed": btrSpeed,
+      "pickerCylSpeed": pickerCylSpeed,
+      "btrFeed": btrFeed,
       "lengthLimit": lengthLimit,
-      "rampTimes": rampTimes,
+      "afFeed": afFeed,
     };
 
     return _settings;
@@ -132,7 +127,7 @@ class SettingsMessage{
 
 void main(){
 
-  String s ="12345678";
+  String s ="123456";
 
   print(SettingsAttribute.values.length.toString());
 }

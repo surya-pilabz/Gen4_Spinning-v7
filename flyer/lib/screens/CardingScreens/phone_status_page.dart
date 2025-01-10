@@ -41,8 +41,8 @@ class _CardingStatusPageUIState extends State<CardingStatusPageUI> {
   bool pause = false;
   bool idle = false;
 
-  int _coilerSensor=0;
-  int _ductSensor=0;
+  int _cardingDuctState=0;
+  int _afFeedState=0;
 
   double _deliveryMtrsPerMin=0;
 
@@ -151,8 +151,8 @@ class _CardingStatusPageUIState extends State<CardingStatusPageUI> {
                     if (_statusResponse.containsKey("coilerSensor") && _statusResponse.containsKey("ductSensor")) {
                       
 
-                      _coilerSensor = double.parse(_statusResponse["coilerSensor"]!).toInt();
-                      _ductSensor = double.parse(_statusResponse["ductSensor"]!).toInt();
+                      _cardingDuctState = double.parse(_statusResponse["coilerSensor"]!).toInt();
+                      _afFeedState = double.parse(_statusResponse["ductSensor"]!).toInt();
                     }
 
                     if (hasError) {
@@ -341,7 +341,7 @@ class _CardingStatusPageUIState extends State<CardingStatusPageUI> {
           ],
         ),
 
-        _sensorStatuses(_coilerSensor, _ductSensor),
+        _sensorStatuses(_cardingDuctState, _afFeedState),
 
         CardingRunningCarousel(connection: connection, multistream: statusStream),
       ],
@@ -391,7 +391,7 @@ class _CardingStatusPageUIState extends State<CardingStatusPageUI> {
           ),
         ),
 
-        _sensorStatuses(_coilerSensor, _ductSensor),
+        _sensorStatuses(_cardingDuctState, _afFeedState),
 
       ],
     );
@@ -638,7 +638,7 @@ class _CardingStatusPageUIState extends State<CardingStatusPageUI> {
     );
   }
 
-  Widget _sensorStatuses(int coilerStatus, int ductStatus){
+  Widget _sensorStatuses(int CardingDuctStatus, int AFDuctStatus){
 
     return Container(
 
@@ -655,7 +655,7 @@ class _CardingStatusPageUIState extends State<CardingStatusPageUI> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "Coiler Sensor (${_coilerSensor==1? "On": "Off"})  ",
+                "Carding Duct State (${_cardingDuctState==1? "Open": "Blocked"})  ",
                 style: TextStyle(fontSize: 18, color: Theme.of(context).highlightColor),
               ),
               Container(
@@ -664,7 +664,7 @@ class _CardingStatusPageUIState extends State<CardingStatusPageUI> {
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey),
                   borderRadius: BorderRadius.circular(50),
-                  color: coilerStatus==1? Colors.lightGreen: Colors.red
+                  color: CardingDuctStatus==1? Colors.lightGreen: Colors.red
                 ),
               ),
 
@@ -675,7 +675,7 @@ class _CardingStatusPageUIState extends State<CardingStatusPageUI> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "Duct Sensor (${_ductSensor==1? "On": "Off"})  ",
+                "Auto Feed Duct State (${_afFeedState==1? "Open": "Blocked"})  ",
                 style: TextStyle(fontSize: 18, color: Theme.of(context).highlightColor),
               ),
               Container(
@@ -684,7 +684,7 @@ class _CardingStatusPageUIState extends State<CardingStatusPageUI> {
                 decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
                     borderRadius: BorderRadius.circular(50),
-                    color: ductStatus==1? Colors.lightGreen: Colors.red
+                    color: AFDuctStatus==1? Colors.lightGreen: Colors.red
                 ),
               ),
             ],

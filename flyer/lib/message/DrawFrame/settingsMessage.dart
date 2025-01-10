@@ -8,16 +8,9 @@ Map<String,List> settingsLimits = {
   "deliverySpeed":[50,150],
   "draft":[5,12],
   "lengthLimit":[5,1250],
-  "rampUpTime":[1,15],
-  "rampDownTime":[1,15],
+  "rampUpTime":[3,15],
+  "rampDownTime":[3,15],
   "creelTensionFactor":[0.25,5],
-};
-
-Map<String,List> pidSettingsLimits = {
-  "Kp":[0,2000],
-  "Ki":[0,2000],
-  "FF":[0,80],
-  "SO":[0,200],
 };
 
 class SettingsMessage{
@@ -28,6 +21,14 @@ class SettingsMessage{
   String rampUpTime;
   String rampDownTime;
   String creelTensionFactor;
+
+
+  Map<String,List> pidSettingsLimits = {
+    "Kp":[0,2000],
+    "Ki":[0,2000],
+    "FF":[0,80],
+    "SO":[0,200],
+  };
 
   SettingsMessage({
   required this.deliverySpeed,
@@ -127,7 +128,7 @@ class SettingsMessage{
 
 void main(){
 
-  String s ="12345678";
+  String s ="123456";
 
   print(SettingsAttribute.values.length.toString());
 }

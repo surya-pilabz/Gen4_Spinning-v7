@@ -22,7 +22,7 @@ class CardingSettingsPage extends StatefulWidget {
 
   Stream<Uint8List> settingsStream;
 
-  CardingSettingsPage({required this.connection, required this.settingsStream});
+  CardingSettingsPage({super.key, required this.connection, required this.settingsStream});
 
   @override
   _CardingSettingsPageState createState() => _CardingSettingsPageState();
@@ -40,7 +40,7 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
   final TextEditingController _lengthLimit = TextEditingController();
   final TextEditingController _rampTimes = TextEditingController();
 
-  List<String> _data = List<String>.empty(growable: true);
+  final List<String> _data = List<String>.empty(growable: true);
   bool newDataReceived = false;
 
   late BluetoothConnection connection;
@@ -64,17 +64,17 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
     try{
       if(!Provider.of<CardingConnectionProvider>(context,listen: false).isSettingsEmpty){
 
-        Map<String,String> _s = Provider.of<CardingConnectionProvider>(context,listen: false).settings;
+        Map<String,String> s = Provider.of<CardingConnectionProvider>(context,listen: false).settings;
 
-        _deliverySpeed.text = _s["deliverySpeed"].toString();
-        _draft.text =  _s["draft"].toString();
-        _cylinderSpeed.text = _s["cylSpeed"].toString();
-        _beaterSpeed.text = _s["btrSpeed"].toString();
-        _cylFeedSpeed.text = _s["cylFeedSpeed"].toString();
-        _btrFeedSpeed.text = _s["btrFeedSpeed"].toString();
-        _trunkSensorDelay.text=_s["trunkDelay"].toString();
-        _lengthLimit.text = _s["lengthLimit"].toString();
-        _rampTimes.text = _s["rampTimes"].toString();
+        _deliverySpeed.text = s["deliverySpeed"].toString();
+        _draft.text =  s["draft"].toString();
+        _cylinderSpeed.text = s["cylSpeed"].toString();
+        _beaterSpeed.text = s["btrSpeed"].toString();
+        _cylFeedSpeed.text = s["cylFeedSpeed"].toString();
+        _btrFeedSpeed.text = s["btrFeedSpeed"].toString();
+        _trunkSensorDelay.text=s["trunkDelay"].toString();
+        _lengthLimit.text = s["lengthLimit"].toString();
+        _rampTimes.text = s["rampTimes"].toString();
       }
     }
     catch(e){
@@ -83,7 +83,7 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
     }
 
     try{
-      settingsStream!.listen(_onDataReceived).onDone(() {});
+      settingsStream.listen(_onDataReceived).onDone(() {});
     }
     catch(e){
 
@@ -109,10 +109,10 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
     double screenWidth = MediaQuery.of(context).size.width;
 
 
-    if(connection!.isConnected){
-      bool _enabled = true; //only for carding
+    if(connection.isConnected){
+      bool enabled = true; //only for carding
 
-      bool _disable = Provider.of<CardingConnectionProvider>(context,listen: false).settingsChangeAllowed;
+      bool disable = Provider.of<CardingConnectionProvider>(context,listen: false).settingsChangeAllowed;
 
 
       return SingleChildScrollView(
@@ -145,15 +145,15 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
               },
               defaultVerticalAlignment: TableCellVerticalAlignment.middle,
               children: <TableRow>[
-                _customRow("DeliverySpeed (mtr/min)", _deliverySpeed,defaultValue: "",enabled: _enabled),
-                _customRow("Draft", _draft,defaultValue: "",enabled: _enabled),
-                _customRow("Card Cylinder RPM", _cylinderSpeed, isFloat: false,defaultValue: "",enabled: _disable),
-                _customRow("Beater Cylinder RPM", _beaterSpeed, isFloat: false,defaultValue: "",enabled: _disable),
-                _customRow("Card Feed RPM", _cylFeedSpeed,defaultValue: "",enabled: _enabled),
-                _customRow("Beater Feed RPM", _btrFeedSpeed,defaultValue: "",enabled: _enabled),
-                _customRow("Duct Sensor Delay(s)", _trunkSensorDelay,isFloat: false,defaultValue: "",enabled: _enabled),
-                _customRow("Length Limit (mtrs)", _lengthLimit,isFloat: false,defaultValue: "",enabled: _enabled),
-                _customRow("Ramp Times (sec)", _rampTimes,isFloat: false,defaultValue: "",enabled: _disable),
+                _customRow("DeliverySpeed (mtr/min)", _deliverySpeed,defaultValue: "",enabled: enabled),
+                _customRow("Draft", _draft,defaultValue: "",enabled: enabled),
+                _customRow("Card Cylinder RPM", _cylinderSpeed, isFloat: false,defaultValue: "",enabled: disable),
+                _customRow("Beater Cylinder RPM", _beaterSpeed, isFloat: false,defaultValue: "",enabled: disable),
+                _customRow("Card Feed RPM", _cylFeedSpeed,defaultValue: "",enabled: enabled),
+                _customRow("Beater Feed RPM", _btrFeedSpeed,defaultValue: "",enabled: enabled),
+                _customRow("Duct Sensor Delay(s)", _trunkSensorDelay,isFloat: false,defaultValue: "",enabled: enabled),
+                _customRow("Length Limit (mtrs)", _lengthLimit,isFloat: false,defaultValue: "",enabled: enabled),
+                _customRow("Ramp Times (sec)", _rampTimes,isFloat: false,defaultValue: "",enabled: disable),
               ],
             ),
 
@@ -161,7 +161,7 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
               width: MediaQuery.of(context).size.width,
             ),
             Container(
-              margin: EdgeInsets.all(10),
+              margin: const EdgeInsets.all(10),
               height: MediaQuery.of(context).size.height*0.1,
               width: MediaQuery.of(context).size.width,
 
@@ -224,10 +224,10 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
               _lengthLimit.text = "100";
               _rampTimes.text = "5";
 
-              SettingsMessage _sm = SettingsMessage(deliverySpeed: _deliverySpeed.text, draft: _draft.text, cylSpeed:_cylinderSpeed.text,beaterSpeed:_beaterSpeed.text,cylFeedSpeed:_cylFeedSpeed.text,btrFeedSpeed:_btrFeedSpeed.text,trunkDelay:_trunkSensorDelay.text,lengthLimit: _lengthLimit.text, rampTimes: _rampTimes.text);
+              SettingsMessage sm = SettingsMessage(deliverySpeed: _deliverySpeed.text, draft: _draft.text, cylSpeed:_cylinderSpeed.text,beaterSpeed:_beaterSpeed.text,cylFeedSpeed:_cylFeedSpeed.text,btrFeedSpeed:_btrFeedSpeed.text,trunkDelay:_trunkSensorDelay.text,lengthLimit: _lengthLimit.text, rampTimes: _rampTimes.text);
 
-              CardingConnectionProvider().setSettings(_sm.toMap());
-              Provider.of<CardingConnectionProvider>(context,listen: false).setSettings(_sm.toMap());
+              CardingConnectionProvider().setSettings(sm.toMap());
+              Provider.of<CardingConnectionProvider>(context,listen: false).setSettings(sm.toMap());
 
             },
             icon: Icon(Icons.settings_backup_restore,color: Theme.of(context).primaryColor,),
@@ -250,37 +250,37 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
         children: [
           IconButton(
             onPressed: () async {
-              String _valid = isValidForm();
+              String valid = isValidForm();
               //if settings are valid, try to see if the motor RPMs are correct
-              if(_valid == "valid"){
-                _valid = calculate();
+              if(valid == "valid"){
+                valid = calculate();
               }
-              if(_valid == "valid"){
+              if(valid == "valid"){
 
-                SettingsMessage _sm = SettingsMessage(deliverySpeed: _deliverySpeed.text, draft: _draft.text, cylSpeed:_cylinderSpeed.text,beaterSpeed:_beaterSpeed.text,cylFeedSpeed:_cylFeedSpeed.text,btrFeedSpeed:_btrFeedSpeed.text,trunkDelay:_trunkSensorDelay.text,lengthLimit: _lengthLimit.text, rampTimes: _rampTimes.text);
-                String _msg = _sm.createPacket(SettingsUpdate.update);
+                SettingsMessage sm = SettingsMessage(deliverySpeed: _deliverySpeed.text, draft: _draft.text, cylSpeed:_cylinderSpeed.text,beaterSpeed:_beaterSpeed.text,cylFeedSpeed:_cylFeedSpeed.text,btrFeedSpeed:_btrFeedSpeed.text,trunkDelay:_trunkSensorDelay.text,lengthLimit: _lengthLimit.text, rampTimes: _rampTimes.text);
+                String msg = sm.createPacket(SettingsUpdate.update);
 
 
-                CardingConnectionProvider().setSettings(_sm.toMap());
-                Provider.of<CardingConnectionProvider>(context,listen: false).setSettings(_sm.toMap());
+                CardingConnectionProvider().setSettings(sm.toMap());
+                Provider.of<CardingConnectionProvider>(context,listen: false).setSettings(sm.toMap());
 
-                connection!.output.add(Uint8List.fromList(utf8.encode(_msg)));
-                await connection!.output!.allSent.then((v) {});
-                await Future.delayed(Duration(milliseconds: 500)); //wait for acknowledgement
+                connection.output.add(Uint8List.fromList(utf8.encode(msg)));
+                await connection.output.allSent.then((v) {});
+                await Future.delayed(const Duration(milliseconds: 500)); //wait for acknowledgement
 
                 if(newDataReceived){
-                  String _d = _data.last;
+                  String d = _data.last;
 
-                  if(_d == Acknowledgement().createErrorPacket()){
+                  if(d == Acknowledgement().createErrorPacket()){
                     //no eeprom error , acknowledge
-                    SnackBar _sb = SnackBarService(message: "Settings Updated", color: Colors.green).snackBar();
-                    ScaffoldMessenger.of(context).showSnackBar(_sb);
+                    SnackBar sb = SnackBarService(message: "Settings Updated", color: Colors.green).snackBar();
+                    ScaffoldMessenger.of(context).showSnackBar(sb);
 
                   }
                   else{
                     //failed acknowledgement
-                    SnackBar _sb = SnackBarService(message: "Settings Not Updated", color: Colors.red).snackBar();
-                    ScaffoldMessenger.of(context).showSnackBar(_sb);
+                    SnackBar sb = SnackBarService(message: "Settings Not Updated", color: Colors.red).snackBar();
+                    ScaffoldMessenger.of(context).showSnackBar(sb);
                   }
 
                   newDataReceived = false;
@@ -290,8 +290,8 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
 
               }
               else{
-                SnackBar _sb = SnackBarService(message: _valid, color: Colors.red).snackBar();
-                ScaffoldMessenger.of(context).showSnackBar(_sb);
+                SnackBar sb = SnackBarService(message: valid, color: Colors.red).snackBar();
+                ScaffoldMessenger.of(context).showSnackBar(sb);
               }
             },
             icon: Icon(Icons.system_update_alt,color: Theme.of(context).primaryColor,),
@@ -313,37 +313,37 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
         children: [
           IconButton(
             onPressed: () async {
-              String _valid = isValidForm();
+              String valid = isValidForm();
               //if settings are valid, try to see if the motor RPMs are correct
-              if(_valid == "valid"){
-                _valid = calculate();
+              if(valid == "valid"){
+                valid = calculate();
               }
-              if(_valid == "valid"){
+              if(valid == "valid"){
 
-                SettingsMessage _sm = SettingsMessage(deliverySpeed: _deliverySpeed.text, draft: _draft.text, cylSpeed:_cylinderSpeed.text,beaterSpeed:_beaterSpeed.text,cylFeedSpeed:_cylFeedSpeed.text,btrFeedSpeed:_btrFeedSpeed.text,trunkDelay:_trunkSensorDelay.text,lengthLimit: _lengthLimit.text, rampTimes: _rampTimes.text);
-                String _msg = _sm.createPacket(SettingsUpdate.save);
+                SettingsMessage sm = SettingsMessage(deliverySpeed: _deliverySpeed.text, draft: _draft.text, cylSpeed:_cylinderSpeed.text,beaterSpeed:_beaterSpeed.text,cylFeedSpeed:_cylFeedSpeed.text,btrFeedSpeed:_btrFeedSpeed.text,trunkDelay:_trunkSensorDelay.text,lengthLimit: _lengthLimit.text, rampTimes: _rampTimes.text);
+                String msg = sm.createPacket(SettingsUpdate.save);
 
-                CardingConnectionProvider().setSettings(_sm.toMap());
-                Provider.of<CardingConnectionProvider>(context,listen: false).setSettings(_sm.toMap());
+                CardingConnectionProvider().setSettings(sm.toMap());
+                Provider.of<CardingConnectionProvider>(context,listen: false).setSettings(sm.toMap());
 
-                connection!.output.add(Uint8List.fromList(utf8.encode(_msg)));
-                await connection!.output!.allSent.then((v) {});
-                await Future.delayed(Duration(milliseconds: 500)); //wait for acknowledgement
+                connection.output.add(Uint8List.fromList(utf8.encode(msg)));
+                await connection.output.allSent.then((v) {});
+                await Future.delayed(const Duration(milliseconds: 500)); //wait for acknowledgement
 
                 if(newDataReceived){
-                  String _d = _data.last;
+                  String d = _data.last;
 
-                  if(_d == Acknowledgement().createErrorPacket()){
+                  if(d == Acknowledgement().createErrorPacket()){
                     //no eeprom error , acknowledge
 
-                    SnackBar _sb = SnackBarService(message: "Settings Saved", color: Colors.green).snackBar();
-                    ScaffoldMessenger.of(context).showSnackBar(_sb);
+                    SnackBar sb = SnackBarService(message: "Settings Saved", color: Colors.green).snackBar();
+                    ScaffoldMessenger.of(context).showSnackBar(sb);
 
                   }
                   else{
                     //failed acknowledgement
-                    SnackBar _sb = SnackBarService(message: "Settings Not Saved", color: Colors.red).snackBar();
-                    ScaffoldMessenger.of(context).showSnackBar(_sb);
+                    SnackBar sb = SnackBarService(message: "Settings Not Saved", color: Colors.red).snackBar();
+                    ScaffoldMessenger.of(context).showSnackBar(sb);
                   }
 
                   newDataReceived = false;
@@ -353,8 +353,8 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
 
               }
               else{
-                SnackBar _sb = SnackBarService(message: _valid, color: Colors.red).snackBar();
-                ScaffoldMessenger.of(context).showSnackBar(_sb);
+                SnackBar sb = SnackBarService(message: valid, color: Colors.red).snackBar();
+                ScaffoldMessenger.of(context).showSnackBar(sb);
               }
             },
             icon: Icon(Icons.save,color: Theme.of(context).primaryColor,),
@@ -378,20 +378,20 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
             onPressed: (){
               try{
 
-                String _err = isValidForm();
+                String err = isValidForm();
 
-                if(_err!="valid"){
+                if(err!="valid"){
                   //if error in form
-                  SnackBar _snack = SnackBarService(message: _err, color: Colors.red).snackBar();
-                  ScaffoldMessenger.of(context).showSnackBar(_snack);
+                  SnackBar snack = SnackBarService(message: err, color: Colors.red).snackBar();
+                  ScaffoldMessenger.of(context).showSnackBar(snack);
 
-                  throw FormatException(_err);
+                  throw FormatException(err);
                 }
 
-                SettingsMessage _sm = SettingsMessage(deliverySpeed: _deliverySpeed.text, draft: _draft.text, cylSpeed:_cylinderSpeed.text,beaterSpeed:_beaterSpeed.text,cylFeedSpeed:_cylFeedSpeed.text,btrFeedSpeed:_btrFeedSpeed.text,trunkDelay:_trunkSensorDelay.text,lengthLimit: _lengthLimit.text, rampTimes: _rampTimes.text);
+                SettingsMessage sm = SettingsMessage(deliverySpeed: _deliverySpeed.text, draft: _draft.text, cylSpeed:_cylinderSpeed.text,beaterSpeed:_beaterSpeed.text,cylFeedSpeed:_cylFeedSpeed.text,btrFeedSpeed:_btrFeedSpeed.text,trunkDelay:_trunkSensorDelay.text,lengthLimit: _lengthLimit.text, rampTimes: _rampTimes.text);
 
-                CardingConnectionProvider().setSettings(_sm.toMap());
-                Provider.of<CardingConnectionProvider>(context,listen: false).setSettings(_sm.toMap());
+                CardingConnectionProvider().setSettings(sm.toMap());
+                Provider.of<CardingConnectionProvider>(context,listen: false).setSettings(sm.toMap());
 
                 showDialog(
                     context: context,
@@ -439,19 +439,19 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
   void _onDataReceived(Uint8List data) {
 
     try {
-      String _d = utf8.decode(data);
+      String d = utf8.decode(data);
 
-      if(_d==null || _d==""){
-        throw FormatException('Invalid Packet');
+      if(d==""){
+        throw const FormatException('Invalid Packet');
       }
 
-      if(_d.substring(4,6)=="02" || _d == Acknowledgement().createErrorPacket() || _d == Acknowledgement().createErrorPacket(error: true)){
+      if(d.substring(4,6)=="02" || d == Acknowledgement().createErrorPacket() || d == Acknowledgement().createErrorPacket(error: true)){
 
         //Allow if:
         //request settins data
         // or if acknowledgement (error or no error )
 
-        _data.add(_d);
+        _data.add(d);
         newDataReceived = true;
       }
 
@@ -656,10 +656,10 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
 
   void _requestSettings() async {
     try {
-      connection!.output.add(Uint8List.fromList(utf8.encode(RequestSettings().createPacket())));
+      connection.output.add(Uint8List.fromList(utf8.encode(RequestSettings().createPacket())));
 
-      await connection!.output!.allSent;
-      await Future.delayed(Duration(seconds: 1)); //wait for acknowlegement
+      await connection.output.allSent;
+      await Future.delayed(const Duration(seconds: 1)); //wait for acknowlegement
       /*SnackBar _sb = SnackBarService(
           message: "Sent Request for Settings!", color: Colors.green)
           .snackBar();*/
@@ -667,9 +667,9 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
 
 
       if(newDataReceived){
-        String _d = _data.last; //remember to make newDataReceived = false;
+        String d = _data.last; //remember to make newDataReceived = false;
 
-        Map<String, double> settings = RequestSettings().decode(_d);
+        Map<String, double> settings = RequestSettings().decode(d);
         //settings = RequestSettings().decode(_d);
 
 
@@ -690,22 +690,22 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
         newDataReceived = false;
 
 
-        SettingsMessage _sm = SettingsMessage(deliverySpeed: _deliverySpeed.text, draft: _draft.text, cylSpeed:_cylinderSpeed.text,beaterSpeed:_beaterSpeed.text,cylFeedSpeed:_cylFeedSpeed.text,btrFeedSpeed:_btrFeedSpeed.text,trunkDelay:_trunkSensorDelay.text,lengthLimit: _lengthLimit.text, rampTimes: _rampTimes.text);
+        SettingsMessage sm = SettingsMessage(deliverySpeed: _deliverySpeed.text, draft: _draft.text, cylSpeed:_cylinderSpeed.text,beaterSpeed:_beaterSpeed.text,cylFeedSpeed:_cylFeedSpeed.text,btrFeedSpeed:_btrFeedSpeed.text,trunkDelay:_trunkSensorDelay.text,lengthLimit: _lengthLimit.text, rampTimes: _rampTimes.text);
 
-        CardingConnectionProvider().setSettings(_sm.toMap());
-        Provider.of<CardingConnectionProvider>(context,listen: false).setSettings(_sm.toMap());
+        CardingConnectionProvider().setSettings(sm.toMap());
+        Provider.of<CardingConnectionProvider>(context,listen: false).setSettings(sm.toMap());
 
 
-        SnackBar _sb = SnackBarService(message: "Settings Received", color: Colors.green).snackBar();
-        ScaffoldMessenger.of(context).showSnackBar(_sb);
+        SnackBar sb0 = SnackBarService(message: "Settings Received", color: Colors.green).snackBar();
+        ScaffoldMessenger.of(context).showSnackBar(sb0);
 
         setState(() {
 
         });
       }
       else{
-        SnackBar _sb = SnackBarService(message: "Settings Not Received", color: Colors.red).snackBar();
-        ScaffoldMessenger.of(context).showSnackBar(_sb);
+        SnackBar sb0 = SnackBarService(message: "Settings Not Received", color: Colors.red).snackBar();
+        ScaffoldMessenger.of(context).showSnackBar(sb0);
 
       }
 
@@ -798,7 +798,7 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
   
   Container _checkConnection(){
 
-    return Container(
+    return SizedBox(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
 
@@ -815,7 +815,7 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
                 color: Theme.of(context).primaryColor,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Text("Please Reconnect...", style: TextStyle(color: Theme.of(context).highlightColor, fontSize: 15),),

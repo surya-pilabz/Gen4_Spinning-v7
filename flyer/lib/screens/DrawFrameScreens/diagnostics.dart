@@ -583,22 +583,6 @@ class _DrawFrameTestPageState extends State<DrawFrameTestPage> {
 
   void runDiagnose() async {
 
-
-
-    if(_bedTravelDistance!=null && _bedTravelDistance.text!="" && _bedTravelDistance.text!=" "){
-
-      String val = _bedTravelDistance.text;
-
-      if(double.parse(val) < globals.diagnosticLimits["bedTravelDistance"]![0] || double.parse(val) > globals.diagnosticLimits["bedTravelDistance"]![1]){
-        SnackBar _sb = SnackBarService(message: "Bed Travel Distance Range ${globals.diagnosticLimits["bedTravelDistance"]}", color: Colors.red).snackBar();
-
-        ScaffoldMessenger.of(context).showSnackBar(_sb);
-        return;
-      }
-
-
-    }
-
     try {
 
       DiagnosticMessage _dm = DiagnosticMessage(

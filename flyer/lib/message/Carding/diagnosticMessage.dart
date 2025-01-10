@@ -72,6 +72,12 @@ class DiagnosticMessage{
         case "COILER":
           _motorId = MotorId.coiler.hexVal;
           break;
+        case "PICKER CYLINDER":
+          _motorId = MotorId.picker_cylinder.hexVal;
+          break;
+        case "AF FEED":
+          _motorId = MotorId.af_feed.hexVal;
+          break;
         default:
           _motorId = MotorId.cylinder.hexVal;
       }

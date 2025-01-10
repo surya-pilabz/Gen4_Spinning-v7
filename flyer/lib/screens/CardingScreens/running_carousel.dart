@@ -21,11 +21,11 @@ class CardingRunningCarousel extends StatefulWidget {
 
 class _CardingRunningCarouselState extends State<CardingRunningCarousel> {
 
-  List<int> items = [1,2,3,4,5,6,7];
+  List<int> items = [1,2,3,4,5,6,7,8,9];
 
   int index=0;
   
-  List<String> _names = ["PRODUCTION","CYLINDER", "BEATER", "CAGE", "CYLINDERFEED", "BEATERFEED", "COILER"];
+  List<String> _names = ["PRODUCTION","CYLINDER", "BEATER", "CAGE", "CYLINDERFEED", "BEATERFEED", "COILER","PICKERCYLINDER","AFFEED"];
 
   List<String> _ids = [
     "0A",//production hard coded
@@ -35,6 +35,8 @@ class _CardingRunningCarouselState extends State<CardingRunningCarousel> {
     MotorId.cylinderFeed.hexVal,
     MotorId.beaterFeed.hexVal,
     MotorId.coiler.hexVal,
+    MotorId.picker_cylinder.hexVal,
+    MotorId.af_feed.hexVal
   ];
 
   String? motorTemp,MOSFETTemp,current,RPM,production,totalPower;
@@ -152,7 +154,7 @@ class _CardingRunningCarouselState extends State<CardingRunningCarousel> {
                             activeColor: Theme.of(context).primaryColor,
                           ),
                           dotsCount: items.length,
-                          position: i-1,
+                          position: i.toDouble()-1,
                         ),
                       ],
                     ),
@@ -198,7 +200,7 @@ class _CardingRunningCarouselState extends State<CardingRunningCarousel> {
                             activeColor: Theme.of(context).primaryColor,
                           ),
                           dotsCount: items.length,
-                          position: i-1,
+                          position: i.toDouble()-1,
                         ),
                       ],
                     ),
@@ -245,7 +247,7 @@ class _CardingRunningCarouselState extends State<CardingRunningCarousel> {
                           activeColor: Theme.of(context).primaryColor,
                         ),
                         dotsCount: items.length,
-                        position: i-1,
+                        position: i.toDouble()-1,
                       ),
                     ],
                   ),

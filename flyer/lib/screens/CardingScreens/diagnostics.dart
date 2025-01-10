@@ -29,7 +29,7 @@ class CardingTestPage extends StatefulWidget {
 class _CardingTestPageState extends State<CardingTestPage> {
 
   //run diagnose variables
-  List<String> _motorName = ["CARD CYLINDER","BEATER CYLINDER","CAGE","CARDING FEED","BEATER FEED","COILER"];
+  List<String> _motorName = ["CARD CYLINDER","BEATER CYLINDER","CAGE","CARDING FEED","BEATER FEED","COILER","PICKER CYLINDER","AF FEED"];
   List<String> _controlType = ["OPEN LOOP","CLOSED LOOP"];
 
   List<String> _motorDirection = ["DEFAULT","REVERSE"];

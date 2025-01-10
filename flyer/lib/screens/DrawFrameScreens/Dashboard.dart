@@ -82,11 +82,14 @@ class _DrawFrameDashboardScaffoldState extends State<DrawFrameDashboardScaffold>
   }
 
 
+
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
+
 
 
   @override
@@ -101,6 +104,8 @@ class _DrawFrameDashboardScaffoldState extends State<DrawFrameDashboardScaffold>
         DrawFrameTestPage(connection: connection, testsStream: multiStream,),
         DrawFrameAdvancedOptionsUI(connection: connection,stream: multiStream,),
       ];
+
+
 
       return Scaffold(
         key: _scaffoldKey,

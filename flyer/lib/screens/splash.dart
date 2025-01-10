@@ -9,15 +9,39 @@ class SplashScreenUI extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedSplashScreen(
-      nextScreen: SelectMachineUI(),
-      splash: "assets/logo.jpeg",
-      splashTransition: SplashTransition.fadeTransition,
-      centered: true,
-      pageTransitionType: PageTransitionType.leftToRightWithFade,
-      splashIconSize: 400,
+    return Column(
+      children: [
+        Expanded(
+          child: AnimatedSplashScreen(
+            nextScreen: SelectMachineUI(),
+            splash: "assets/logo.jpeg",
+            splashTransition: SplashTransition.fadeTransition,
+            centered: true,
+            pageTransitionType: PageTransitionType.leftToRightWithFade,
+            splashIconSize: 400,
+          ),
+        ),
+        Container(
+          color: Colors.white,
+          width: double.infinity,
+          alignment: Alignment.bottomRight,
+          child: Padding(
+            padding: EdgeInsets.only(right: 12.0, bottom: 8.0),
+            child: Text(
+              "version V7",
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.black,
+
+              ),
+            ),
+          ),
+        )
+
+      ],
     );
   }
+
 }
 
 /*

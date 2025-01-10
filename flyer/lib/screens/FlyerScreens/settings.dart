@@ -279,7 +279,7 @@ class _FlyerSettingsPageState extends State<FlyerSettingsPage> {
                   if(newDataReceived){
                     String _d = _data.last;
 
-                    if(_d == Acknowledgement().createErrorPacket()){
+                    if(_d == Acknowledgement().createPacket()){
                       //no eeprom error , acknowledge
                       SnackBar _sb = SnackBarService(message: "Settings Saved", color: Colors.green).snackBar();
                       ScaffoldMessenger.of(context).showSnackBar(_sb);
@@ -443,7 +443,7 @@ class _FlyerSettingsPageState extends State<FlyerSettingsPage> {
         throw FormatException('Invalid Packet');
       }
 
-      if(_d.substring(4,6)=="02" || _d == Acknowledgement().createErrorPacket() || _d == Acknowledgement().createErrorPacket(error: true)){
+      if(_d.substring(4,6)=="02" || _d == Acknowledgement().createPacket() || _d == Acknowledgement().createPacket(error: true)){
 
         //Allow if:
         //request settins data

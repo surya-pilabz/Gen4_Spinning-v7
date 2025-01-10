@@ -184,7 +184,7 @@ class _FlyerDrawerPageState extends State<FlyerDrawerPage> {
                             throw FormatException("Failed To Change Name");
                           }
 
-                          if(_d == Acknowledgement().createErrorPacket()){
+                          if(_d == Acknowledgement().createPacket()){
                             Navigator.of(context).pop();
                             await showMessage("Changed Name Successfully");
 

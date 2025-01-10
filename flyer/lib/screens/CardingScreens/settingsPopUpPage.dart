@@ -106,7 +106,7 @@ class CardingPopUpUIState extends State<CardingPopUpUI> {
               'Cylinder Motor RPM :\t${cylinderMotorRPM.toStringAsFixed(0)??"-"}',
               style:
               TextStyle(
-                  color: cylinderMotorRPM <= 3500?  Colors.black: Colors.red,
+                  color: cylinderMotorRPM <= 1450?  Colors.black: Colors.red,
                   fontSize:  15),
             ),
           ),
@@ -116,7 +116,7 @@ class CardingPopUpUIState extends State<CardingPopUpUI> {
               'Beater Motor RPM:\t\t${beaterMotorRPM.toStringAsFixed(0)??"-"}',
               style:
               TextStyle(
-                  color: beaterMotorRPM <= 3500?  Colors.black: Colors.red,
+                  color: beaterMotorRPM <= 1450?  Colors.black: Colors.red,
                   fontSize:  15,
               ),
             ),
@@ -176,6 +176,7 @@ class CardingPopUpUIState extends State<CardingPopUpUI> {
   
   void calculate(){
 
+    int maxRPM = 1450;
     double deliverySpeed = _deliverySpeed;
     double draft = _draft;
     double cylSpeed = _cylinderSpeed;
@@ -183,18 +184,18 @@ class CardingPopUpUIState extends State<CardingPopUpUI> {
     double cylFeedSpeed = _cylFeedSpeed;
     double btrFeedSpeed = _btrFeedSpeed;
 
-    double cylinderGearRatio = 4;
-    double beaterGearRatio = 4;
-    double cylinderFeedGb = 120;
-    double beaterFeedGb = 120;
+    double cylinderGearRatio = 1.2;
+    double beaterGearRatio = 1.2;
+    double cylinderFeedGb = 180;
+    double beaterFeedGb = 180;
     double tongueGrooveCircumferenceMm = 213.63;
-    double cageGb = 5;
+    double cageGb = 6.91;
     double coilerGrooveCircumferenceMm = 194.779;
     double coilerGrooveToGbRatio = 1.656;
     double coilerGb = 6.91;
 
-    cylinderMotorRPM = cylSpeed*cylinderGearRatio;
-    beaterMotorRPM = btrSpeed*beaterGearRatio;
+    cylinderMotorRPM = cylSpeed/cylinderGearRatio;
+    beaterMotorRPM = btrSpeed/beaterGearRatio;
     cylinderFeedMotorRPM = cylFeedSpeed * cylinderFeedGb;
     beaterFeedMotorRPM = btrFeedSpeed * beaterFeedGb;
     double cageGbRpm = (deliverySpeed*1000)/tongueGrooveCircumferenceMm;

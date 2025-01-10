@@ -72,7 +72,7 @@ class PidSettings{
       len = s.length;
     }
     for(int i = 0;i < no-len;i++){
-      s = "0"+s;
+      s = "0$s";
     }
     return s;
   }
@@ -116,7 +116,7 @@ class PidSettings{
   Map<String, double> decodePacket(String packet) {
     //decodes packet after PID request is sent
     //print("packet: $packet");
-    Map<String, double> pidSettings = Map<String, double>();
+    Map<String, double> pidSettings = <String, double>{};
 
     String sof = packet.substring(0,2); //7E start of frame
     int len = int.parse(packet.substring(2,4),radix: 16); //Packet Length

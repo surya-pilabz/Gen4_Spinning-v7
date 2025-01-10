@@ -157,7 +157,7 @@ class SettingsMessage{
 
 void main(){
 
-  String s ="12345678";
+  String s ="123456";
 
   print(SettingsAttribute.values.length.toString());
 }

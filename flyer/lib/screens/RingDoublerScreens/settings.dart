@@ -329,7 +329,7 @@ class _RingDoublerSettingsPageState extends State<RingDoublerSettingsPage> {
                   if (newDataReceived) {
                     String _d = _data.last;
 
-                    if (_d == Acknowledgement().createErrorPacket()) {
+                    if (_d == Acknowledgement().createPacket()) {
                       //no eeprom error , acknowledge
                       SnackBar _sb = SnackBarService(
                               message: "Settings Saved", color: Colors.green)
@@ -535,8 +535,8 @@ class _RingDoublerSettingsPageState extends State<RingDoublerSettingsPage> {
       }
 
       if (_d.substring(4, 6) == "02" ||
-          _d == Acknowledgement().createErrorPacket() ||
-          _d == Acknowledgement().createErrorPacket(error: true)) {
+          _d == Acknowledgement().createPacket() ||
+          _d == Acknowledgement().createPacket(error: true)) {
         //Allow if:
         //request settins data
         // or if acknowledgement (error or no error )

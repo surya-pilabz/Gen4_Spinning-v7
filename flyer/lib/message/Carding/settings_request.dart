@@ -8,7 +8,7 @@ class RequestSettings{
   Map<String, double> decode(String packet) {
     //decodes packet after settings request is sent
 
-    //print("packet: $packet");
+    print("packet: $packet");
 
     Map<String, double> _settings = Map<String, double>();
 
@@ -61,7 +61,7 @@ class RequestSettings{
         v = convert(val);
       }
 
-      //print("t: $t, l: $l, v: $val , key: $key");
+      print("t: $t, l: $l, v: $val , key: $key");
       _settings[key] = v;
 
       i=i+4+l;
@@ -87,29 +87,26 @@ class RequestSettings{
     if(t==SettingsAttribute.deliverySpeed.hexVal){
       return SettingsAttribute.deliverySpeed.name;
     }
-    else if(t==SettingsAttribute.draft.hexVal){
-      return SettingsAttribute.draft.name;
+    else if(t==SettingsAttribute.cardFeedRatio.hexVal){
+      return SettingsAttribute.cardFeedRatio.name;
     }
     else if(t==SettingsAttribute.cylSpeed.hexVal){
       return SettingsAttribute.cylSpeed.name;
     }
-    else if(t==SettingsAttribute.cylFeedSpeed.hexVal){
-      return SettingsAttribute.cylFeedSpeed.name;
+    else if(t==SettingsAttribute.btrFeed.hexVal){
+      return SettingsAttribute.btrFeed.name;
     }
     else if(t==SettingsAttribute.btrSpeed.hexVal){
       return SettingsAttribute.btrSpeed.name;
     }
-    else if(t==SettingsAttribute.btrFeedSpeed.hexVal){
-      return SettingsAttribute.btrFeedSpeed.name;
-    }
-    else if(t==SettingsAttribute.trunkDelay.hexVal){
-      return SettingsAttribute.trunkDelay.name;
+    else if(t==SettingsAttribute.pickerCylSpeed.hexVal) {
+      return SettingsAttribute.pickerCylSpeed.name;
     }
     else if(t==SettingsAttribute.lengthLimit.hexVal){
       return SettingsAttribute.lengthLimit.name;
     }
-    else if(t==SettingsAttribute.rampTimes.hexVal){
-      return SettingsAttribute.rampTimes.name;
+    else if(t==SettingsAttribute.afFeed.hexVal){
+      return SettingsAttribute.afFeed.name;
     }
     else{
       return "";

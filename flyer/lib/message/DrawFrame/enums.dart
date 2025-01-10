@@ -1,8 +1,14 @@
-enum Separator { sof, eof }
 
-extension SeparatorExtension on Separator {
+
+enum Separator {
+  sof,
+  eof
+}
+
+extension SeparatorExtension on Separator{
   String get hexVal {
-    switch (this) {
+    switch (this){
+
       case Separator.sof:
         return "7E";
       case Separator.eof:
@@ -11,17 +17,20 @@ extension SeparatorExtension on Separator {
   }
 }
 
-enum MachineId {
+
+enum MachineId{
   cardingMachine,
   drawFrame,
   flyer,
   ringFrame,
+
 }
 
 //ignore
-extension MachineIdExtension on MachineId {
+extension MachineIdExtension on MachineId{
   String get hexVal {
-    switch (this) {
+    switch (this){
+
       case MachineId.cardingMachine:
         return "01";
       case MachineId.drawFrame:
@@ -30,9 +39,14 @@ extension MachineIdExtension on MachineId {
         return "03";
       case MachineId.ringFrame:
         return "04";
+
     }
   }
 }
+
+
+
+
 
 enum Information {
   impaired,
@@ -53,9 +67,11 @@ enum Information {
   pidNew,
 }
 
-extension InformationExtension on Information {
+extension InformationExtension on Information{
+
   String get hexVal {
-    switch (this) {
+    switch (this){
+
       case Information.impaired:
         return "99";
       case Information.settingsFromApp:
@@ -92,7 +108,7 @@ extension InformationExtension on Information {
   }
 }
 
-enum Substate {
+enum Substate{
   idle,
   running,
   pause,
@@ -102,9 +118,11 @@ enum Substate {
   error,
 }
 
-extension SubstateExtension on Substate {
+extension SubstateExtension on Substate{
+
   String get hexVal {
-    switch (this) {
+    switch (this){
+
       case Substate.idle:
         return "00";
       case Substate.running:
@@ -123,14 +141,17 @@ extension SubstateExtension on Substate {
   }
 }
 
+
 enum Homing {
   leftLiftDistance,
   rightLiftDistance,
 }
 
-extension homingExtension on Homing {
+extension homingExtension on Homing{
+
   String get hexVal {
-    switch (this) {
+    switch (this){
+
       case Homing.rightLiftDistance:
         return "02";
       case Homing.leftLiftDistance:
@@ -141,9 +162,18 @@ extension homingExtension on Homing {
   }
 }
 
-enum Error { information, source, action }
 
-extension errorExtension on Error {
+
+
+
+enum Error{
+  information,
+  source,
+  action
+}
+
+extension errorExtension on Error{
+
   String get hexVal {
     switch (this) {
       case Error.information:
@@ -158,11 +188,12 @@ extension errorExtension on Error {
   }
 }
 
-enum Pause {
+enum Pause{
   pauseReason,
 }
 
-extension pauseExtension on Pause {
+extension pauseExtension on Pause{
+
   String get hexVal {
     switch (this) {
       case Pause.pauseReason:
@@ -173,14 +204,15 @@ extension pauseExtension on Pause {
   }
 }
 
-enum pauseReason {
+enum pauseReason{
   userPaused,
   creelSliverCut,
   coilerSliverCut,
   lapping,
 }
 
-extension pauseReasonExtension on pauseReason {
+extension pauseReasonExtension on pauseReason{
+
   String get hexVal {
     switch (this) {
       case pauseReason.userPaused:
@@ -197,14 +229,19 @@ extension pauseReasonExtension on pauseReason {
   }
 }
 
-enum ControlType {
+
+
+
+enum ControlType{
   closedLoop,
   openLoop,
 }
 
-extension ControlTypeExtension on ControlType {
+extension ControlTypeExtension on ControlType{
+
   String get hexVal {
-    switch (this) {
+    switch (this){
+
       case ControlType.closedLoop:
         return "02";
       case ControlType.openLoop:
@@ -213,7 +250,10 @@ extension ControlTypeExtension on ControlType {
   }
 }
 
-enum DiagnosticAttributeType {
+
+
+
+enum DiagnosticAttributeType{
   kindOfTest,
   motorID,
   motorDirection,
@@ -222,9 +262,11 @@ enum DiagnosticAttributeType {
   bedDistance,
 }
 
-extension DiagnosticAttributeTypeExtension on DiagnosticAttributeType {
+extension DiagnosticAttributeTypeExtension on DiagnosticAttributeType{
+
   String get hexVal {
-    switch (this) {
+    switch (this){
+
       case DiagnosticAttributeType.kindOfTest:
         return "41";
       case DiagnosticAttributeType.motorID:
@@ -241,7 +283,7 @@ extension DiagnosticAttributeTypeExtension on DiagnosticAttributeType {
   }
 }
 
-enum DiagnosticResponse {
+enum DiagnosticResponse{
   speedRPM,
   signalVoltage,
   current,
@@ -249,9 +291,11 @@ enum DiagnosticResponse {
   lift,
 }
 
-extension DiagnosticResponseExtension on DiagnosticResponse {
+extension DiagnosticResponseExtension on DiagnosticResponse{
+
   String get hexVal {
-    switch (this) {
+    switch (this){
+
       case DiagnosticResponse.speedRPM:
         return "01";
       case DiagnosticResponse.signalVoltage:
@@ -266,11 +310,16 @@ extension DiagnosticResponseExtension on DiagnosticResponse {
   }
 }
 
-enum MotorDirection { defaultDirection, reverseDirection }
+enum MotorDirection{
+  defaultDirection,
+  reverseDirection
+}
 
-extension MotorDirectionExtension on MotorDirection {
+extension MotorDirectionExtension on MotorDirection{
+
   String get hexVal {
-    switch (this) {
+    switch (this){
+
       case MotorDirection.defaultDirection:
         return "00";
       case MotorDirection.reverseDirection:
@@ -279,16 +328,18 @@ extension MotorDirectionExtension on MotorDirection {
   }
 }
 
-enum GearBoxSettings {
+enum GearBoxSettings{
   start,
   stop,
   saveLeft,
   saveRight,
 }
 
-extension GearBoxSettingsExtension on GearBoxSettings {
+extension GearBoxSettingsExtension on GearBoxSettings{
+
   String get hexVal {
-    switch (this) {
+    switch (this){
+
       case GearBoxSettings.start:
         return "01";
       case GearBoxSettings.stop:
@@ -299,13 +350,15 @@ extension GearBoxSettingsExtension on GearBoxSettings {
         return "04";
     }
   }
+
 }
 
-enum RTFAttributes {
+enum RTFAttributes{
   value,
 }
 
-extension RTFAttributesExtension on RTFAttributes {
+extension RTFAttributesExtension on RTFAttributes{
+
   String get hexVal {
     switch (this) {
       case RTFAttributes.value:
@@ -314,12 +367,13 @@ extension RTFAttributesExtension on RTFAttributes {
   }
 }
 
-enum LogAttributes {
+enum LogAttributes{
   enable,
   disable,
 }
 
-extension LogAttributesExtension on LogAttributes {
+extension LogAttributesExtension on LogAttributes{
+
   String get hexVal {
     switch (this) {
       case LogAttributes.enable:
@@ -329,29 +383,27 @@ extension LogAttributesExtension on LogAttributes {
     }
   }
 }
-
-
-enum pidParameters {
+  enum pidParameters {
   whichMotor,
   kP,
   kI,
   feedForward,
   startOffset,
-}
+  }
 
-extension pidParametersExtension on pidParameters {
+  extension pidParametersExtension on pidParameters {
   String get hexVal {
-    switch (this) {
-      case pidParameters.whichMotor:
-        return "01";
-      case pidParameters.kP:
-        return "02";
-      case pidParameters.kI:
-        return "03";
-      case pidParameters.feedForward:
-        return "04";
-      case pidParameters.startOffset:
-        return "05";
-    }
+  switch (this) {
+  case pidParameters.whichMotor:
+  return "01";
+  case pidParameters.kP:
+  return "02";
+  case pidParameters.kI:
+  return "03";
+  case pidParameters.feedForward:
+  return "04";
+  case pidParameters.startOffset:
+  return "05";
+  }
   }
 }
