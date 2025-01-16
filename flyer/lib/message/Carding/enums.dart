@@ -66,6 +66,9 @@ enum Information {
   gearBoxSettingsFromMachine,
   RTF,
   log,
+  pidRequest,
+  pidResponse,
+  pidNew,
 }
 
 extension InformationExtension on Information{
@@ -99,6 +102,12 @@ extension InformationExtension on Information{
         return "0B";
       case Information.log:
         return "0C";
+      case Information.pidRequest:
+        return "0D";
+      case Information.pidResponse:
+        return "0E";
+      case Information.pidNew:
+        return "0F";
     }
   }
 }
@@ -374,6 +383,30 @@ extension LogAttributesExtension on LogAttributes{
         return "01";
       case LogAttributes.disable:
         return "00";
+    }
+  }
+}
+enum pidParameters {
+  whichMotor,
+  kP,
+  kI,
+  feedForward,
+  startOffset,
+}
+
+extension pidParametersExtension on pidParameters {
+  String get hexVal {
+    switch (this) {
+      case pidParameters.whichMotor:
+        return "01";
+      case pidParameters.kP:
+        return "02";
+      case pidParameters.kI:
+        return "03";
+      case pidParameters.feedForward:
+        return "04";
+      case pidParameters.startOffset:
+        return "05";
     }
   }
 }

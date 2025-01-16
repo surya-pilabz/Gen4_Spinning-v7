@@ -311,7 +311,6 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
 
                 if(newDataReceived){
                   String _d = _data.last;
-
                   if(_d == Acknowledgement().createPacket()){
                     //no eeprom error , acknowledge
 
@@ -906,9 +905,9 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const PIDSettingsCarding(
-                          connection: null,
-                          settingsStream: null,
+                        builder: (context) =>PIDSettingsCarding(
+                          connection: connection,
+                          settingsStream: settingsStream,
                         ),
                       ),
                     );
