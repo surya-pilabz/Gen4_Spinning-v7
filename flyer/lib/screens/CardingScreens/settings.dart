@@ -146,44 +146,43 @@ class _CardingSettingsPageState extends State<CardingSettingsPage> {
               children: <TableRow>[
                 _customRow("Delivery Speed (m/min)", _deliverySpeed, defaultValue: "", enabled: _enabled),
                 TableRow(
-                  children: [
-                    TableCell(
+                  children: [Padding(
+                    padding: const EdgeInsets.only(left: 80.0),
+                    child: TableCell(
                       child: Padding(
                         padding: EdgeInsets.symmetric(vertical: 8.0),
                         child: Row(
-                          mainAxisSize: MainAxisSize.min,
                           children: [
                             Expanded(
-                              flex: 8,
                               child: Divider(
                                 color: Colors.grey,
                                 thickness: 1.0,
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 2.0),
+                              padding: EdgeInsets.symmetric(horizontal: 8.0),
                               child: Text(
                                 "Advanced Settings",
                                 style: TextStyle(
                                   fontSize: 14.0,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.black,
+                                  color: Theme.of(context).primaryColor,
                                 ),
                               ),
                             ),
                             Expanded(
-                            flex: 8,
                               child: Divider(
                                 color: Colors.grey,
                                 thickness: 1.0,
-
                               ),
                             ),
                           ],
                         ),
                       ),
                     ),
-                    const TableCell(child: SizedBox()), // Empty cell for alignment
+                  ),
+
+                    const TableCell(child: SizedBox()),
                   ],
                 ),
                 _customRow("CardFeed Ratio", _cardFeedRatio, defaultValue: "", enabled: _enabled),
